@@ -2,17 +2,17 @@ import sys
 import os
 import glob
 
-def git_tag(tag):
-	os.system("git tag %s" % (dir, tag))
-
 def main():
     ver = sys.argv[1]
     for p in glob.glob('tencentcloud/*/go.mod'):
+        if p == 'tencentcloud/common/go.mod':
+            continue
+
         with open(p, 'r+') as f:
             c = ''
             replaced = False
             for line in f.readlines():
-                if 'require github.com/sesky4/tgo/common' not in line:
+                if 'require github.com/sesky4/tgo/tencentcloud/common' not in line:
                     c += line
                     continue
 
@@ -21,7 +21,7 @@ def main():
                 replaced = True
 
             if not replaced:
-                c += "\nrequire github.com/sesky4/tgo/common %s\n" % ver
+                c += "\nrequire github.com/sesky4/tgo/tencentcloud/common %s\n" % ver
 
             f.seek(0)
             f.truncate(0)
